@@ -1,64 +1,107 @@
-const botoes = document.querySelectorAll(".botao");
-const textos = document.querySelectorAll(".aba-conteudo");
+const caixaPrincipal =  document.querySelector(".caixa-principal");
+ const caixaPerguntas =  document.querySelector(".caixa-perguntas"); 
+ const caixaAlternativas =  document.querySelector(".caixa-alternativas");
+ const caixaResultado =  document.querySelector(".caixa-resultado");
+ const textoResultado =  document.querySelector(".texto-resultado");
 
-for(let i=0;i <botoes.length;i++){
-    botoes[i].onclick = function(){
-        
-        for(let j=0;j<botoes.length;j++){
-            botoes[j].classList.remove("ativo");
-            textos[j].classList.remove("ativo");
-        }
-        
-        botoes[i].classList.add("ativo");
-        textos[i].classList.add("ativo");
+ const perguntas = [
+    {
+        enunciado: "O tráfico de animais é uma pratica ilegal que consiste em retirar os animais de seu habitat natural e vende-los clandestinamente. As aves são o principal alvo do tráfico de animais silvestres no Brasil. Você tem ou conhece alguém que tenha um animal silvestre ?",
+        alternativas: [
+            {
+                texto: "Sim",
+                afirmacao: "Não deixe esse criminoso sair em pune DENUNCIE!!"
+            },
+            {
+                 
+            texto: "Não",
+            afirmacao: "Bom saber"
+             }
+        ]
+    },
+    {
+        enunciado: "Se você presenciasee alguém da sua família cometendo esse crime, o que você faria ?",
+        alternativas: [
+            {
+                texto: "Denunciaria a pessoa",
+                afirmacao: "Um bom senso em parte desse acontecimento"
+            },
+            {
+                 
+            texto: "Acobertaria o crime",
+            afirmacao: "Seria cumplice e sofreria com as consequências desse ato"
+            }
+        ]
+    },
+    {
+        enunciado: "Cometendo esse ato infracionário (crime) você teria uma penalização de:",
+        alternativas: [
+            {
+                texto: "Serviço comunitário por 1 ano + multa",
+                afirmacao: "você errou"
+            },
+            {
+                 
+            texto: "Detenção de 6 meses a 1 ano + multa",
+            afirmacão:"Parabéns você acertou"
+            }
+        ]
+    },
+    {
+        enunciado: "Tendo em visto que você ficaria praticamente 1 ano preso por esse crime, valeria a pena mesmo ?",
+        alternativas: [
+            {
+                texto: "Sim",
+                afirmacao: "você realmente tem coragem"
+            },
+            {
+                 
+            texto: "Não",
+            afirmacao: "Você pensa como todo mundo"
+            }
+        ]
+    },
+ ];
+ 
+ 
+ let atual = 0 ;
+ let perguntaAtual;
+ let historiaFinal = "";
+ 
+ 
+ function mostraPergunta() {
+    if (atual >= perguntas.length){
+        mostraResultado()
+        return;
     }
-}
+    perguntaAtual = perguntas [atual];
+    caixaPerguntas.textContent = perguntaAtual.enunciado;
+    caixaAlternativas.textContent = "";
+    mostraAlternativas();
+ }
+ 
+ function mostraAlternativas() {
+    for (const alternativa of perguntaAtual.alternativas) {
+    const botaoAlternativas = document.createElement("button");
+    botaoAlternativas.textContent = alternativa.texto;
+    botaoAlternativas.addEventListener("click",  () => respostaSelecionada (alternativa))
+    caixaAlternativas.appendChild(botaoAlternativas);
+ }
+ }
+ 
+ function respostaSelecionada (opcaoSelecionada){
+    const afirmacoes = opcaoSelecionada.afirmacoes;
+    historiaFinal = afirmacoes;
+    atual++;
+    mostraPergunta ();
+ }
 
-const contadores = document.querySelectorAll(".contador");
-const tempoObjetivo1 = new Date("2020-10-05T00:00:00");
-const tempoObjetivo2 = new Date("2023-12-05T00:00:00");
-const tempoObjetivo3 = new Date("2023-12-30T00:00:00");
-const tempoObjetivo4 = new Date("2024-02-01T00:00:00");
-
-const tempos = [tempoObjetivo1,tempoObjetivo2,tempoObjetivo3,tempoObjetivo4];
-
-
-function calculaTempo(tempoObjetivo) {
-    let tempoAtual = new-Date();
-    let tempoFinal = tempoObjetivo - tempoAtual;
-    let segundos = Math.floor(tempoFinal / 1000);
-    let minutos = Math.floor(segundos / 60);
-    let horas = Math.floor(minutos / 60);
-    let dias = Math.floor(horas / 24);
-
-    segundos %= 60;
-    minutos %= 60;
-    horas %= 24;
-    if (tempoFinal > 0){
-        return [dias,horas,minutos,segundos];
-    } else {
-        return [0,0,0,0];
-    }
-}
-
-function atualizaCronometro(){
-    document.getElementById("dias0").textContent = calculaTempo(tempos[0])[0];
-    document.getElementById("horas0").textContent = calculaTempo(tempos[0])[1];
-    document.getElementById("min0").textContent = calculaTempo(tempos[0])[2];
-    document.getElementById("seg0").textContent = calculaTempo(tempos[0])[3];
-
-    for (let i=0; i<contadores.length;i++){
-        // contadores[i].textContent = calculaTempo(tempos[i]);
-    }
-}
-
-function comecaCronometro(){
-      atualizaCronometro();
-    setInterval(atualizaCronometro,1000);
-}
-
-comecaCronometro();
-    
-        
-    
+ function mostraResultado(){
+    caixaPerguntas.textContent = "Em 2049...";
+    textoResultado.textContent = historiaFinal;
+    caixaAlternativas.textContent = "";
+ }
+ 
+ mostraPergunta ();
+ 
 
